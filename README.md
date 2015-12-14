@@ -12,6 +12,7 @@ You can change low, hight, target themperatures (C) of thermostate, and on/off s
 "Security mode off" means that thermostat do nothing when smoke protection switch into alarm or warning state
 
 Frontend: single page, angularjs, bootstrap
+
 Backend: Spring Boot, REST services, slf4j, firebase, maven
 
 IDE: eclipse
