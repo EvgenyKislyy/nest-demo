@@ -44,8 +44,8 @@ public class NestDemoApplicationTests {
 	@Test
 	public void testFanTimerActive() {
 		EventListener callback = mock(EventListener.class);
-		nestConnector.setDeviceParam(Keys.THERMOSTATS, THERMOSTAT_ID, Keys.THERMOSTAT.FAN_TIMER_ACTIVE, true);
 		nestConnector.addDeviceListener(Keys.THERMOSTATS, THERMOSTAT_ID, Keys.THERMOSTAT.FAN_TIMER_ACTIVE, callback);
+		nestConnector.setDeviceParam(Keys.THERMOSTATS, THERMOSTAT_ID, Keys.THERMOSTAT.FAN_TIMER_ACTIVE, true);		
 		verify(callback, timeout(30000)).onDataChange("true");
 
 	}
@@ -53,8 +53,8 @@ public class NestDemoApplicationTests {
 	@Test
 	public void testFanTimerPassive() {
 		EventListener callback = mock(EventListener.class);
-		nestConnector.setDeviceParam(Keys.THERMOSTATS, THERMOSTAT_ID, Keys.THERMOSTAT.FAN_TIMER_ACTIVE, false);
 		nestConnector.addDeviceListener(Keys.THERMOSTATS, THERMOSTAT_ID, Keys.THERMOSTAT.FAN_TIMER_ACTIVE, callback);
+		nestConnector.setDeviceParam(Keys.THERMOSTATS, THERMOSTAT_ID, Keys.THERMOSTAT.FAN_TIMER_ACTIVE, false);		
 		verify(callback, timeout(30000)).onDataChange("false");
 	}
 
@@ -78,20 +78,23 @@ public class NestDemoApplicationTests {
 
 	@Test
 	public void testSecurityTrue() {
-
+		EventListener callback = mock(EventListener.class);
+		nestConnector.addDeviceListener(Keys.THERMOSTATS, THERMOSTAT_ID, Keys.THERMOSTAT.HVAC_MODE, callback);
 		nestConnector.setDeviceParam(Keys.THERMOSTATS, THERMOSTAT_ID, Keys.THERMOSTAT.HVAC_MODE,
 				Keys.THERMOSTAT.HVAC_MODES.HEAT_COOL);
 		service.setSecurity(true);
 		nestConnector.setDeviceParam(Keys.SMOKE_CO_ALARMS, PROTECT_ID, Keys.SMOKE_CO_ALARM.CO_ALARM_STATE,
 				Keys.SMOKE_CO_ALARM.SMOKE_ALARM_STATES.EMERGENCY);
-		EventListener callback = mock(EventListener.class);
-		nestConnector.addDeviceListener(Keys.THERMOSTATS, THERMOSTAT_ID, Keys.THERMOSTAT.HVAC_MODE, callback);
+
 		verify(callback, timeout(10000)).onDataChange(Keys.THERMOSTAT.HVAC_MODES.OFF);
 
 	}
 
 	@Test
 	public void testSecurityFalse() {
+		EventListener callback2 = mock(EventListener.class);
+
+		nestConnector.addDeviceListener(Keys.THERMOSTATS, THERMOSTAT_ID, Keys.THERMOSTAT.HVAC_MODE, callback2);
 		nestConnector.setDeviceParam(Keys.SMOKE_CO_ALARMS, PROTECT_ID, Keys.SMOKE_CO_ALARM.CO_ALARM_STATE,
 				Keys.SMOKE_CO_ALARM.SMOKE_ALARM_STATES.OK);
 
@@ -100,9 +103,7 @@ public class NestDemoApplicationTests {
 				Keys.THERMOSTAT.HVAC_MODES.HEAT_COOL);
 		nestConnector.setDeviceParam(Keys.SMOKE_CO_ALARMS, PROTECT_ID, Keys.SMOKE_CO_ALARM.CO_ALARM_STATE,
 				Keys.SMOKE_CO_ALARM.SMOKE_ALARM_STATES.WARNING);
-		EventListener callback2 = mock(EventListener.class);
 
-		nestConnector.addDeviceListener(Keys.THERMOSTATS, THERMOSTAT_ID, Keys.THERMOSTAT.HVAC_MODE, callback2);
 		verify(callback2, timeout(10000)).onDataChange(Keys.THERMOSTAT.HVAC_MODES.HEAT_COOL);
 	}
 
